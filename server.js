@@ -6,7 +6,11 @@ delete animations.meta;
 
 const PORT = process.env.PORT || 8080;
 const ESC = '\x1b[';
-const clamp = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : d; };
+const clamp = (v, lo, hi, d) => {
+  if (v === null || v === undefined || String(v).trim() === '') return d;
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : d;
+};
 
 // ---- color palettes: value 0..1 -> 256-color index ----
 const palettes = {
