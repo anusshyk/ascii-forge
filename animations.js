@@ -290,8 +290,64 @@ function propose(t, w, h) {
   return o;
 }
 
+
+// ---------- graduate: graduation celebration, lifted on friends' shoulders ----------
+function graduate(t, w, h) {
+  const o = blank(w, h);
+  const put = (x, y, str, v) => {
+    for (let i = 0; i < str.length; i++) {
+      const xx = Math.round(x) + i;
+      if (str[i] !== ' ' && xx >= 0 && xx < w && y >= 0 && y < h) { o.chars[y * w + xx] = str[i]; o.vals[y * w + xx] = v; }
+    }
+  };
+  const ground = h - 2, y0base = ground - 10, gx = Math.floor(w / 2) - 1;
+  // confetti falling behind everything
+  for (let i = 0; i < 45; i++) {
+    const f = (t * 0.35 + i * 0.211) % 1;
+    put((i * 37 + 5) % w, Math.floor(f * ground), '*+.:o'[i % 5], (i * 0.137) % 1);
+  }
+  // building and bush
+  const bx = 3, bw = 20, top = 4;
+  put(bx, top, '_'.repeat(bw), 0.6);
+  put(bx + 5, top + 1, ' CAMPUS ', 0.6);
+  for (let y = top + 1; y < ground; y++) { put(bx, y, '|', 0.6); put(bx + bw - 1, y, '|', 0.6); }
+  for (let y = top + 3; y < ground - 2; y += 3) for (let x = bx + 3; x < bx + bw - 3; x += 5) put(x, y, '[_]', 0.55);
+  put(w - 13, ground - 2, '(@@@@)', 0.45);
+  put(w - 14, ground - 1, '(@@@@@@)', 0.45);
+  // ground with confetti
+  put(0, ground, '_'.repeat(w), 0.45);
+  for (let i = 0; i < 20; i++) put((i * 29 + 3) % w, ground + 1 < h ? ground + 1 : ground, ',.:*'[i % 4], (i * 0.19) % 1);
+  // friends bounce while carrying
+  const b = Math.sin(t * 5) > 0.35 ? 1 : 0;
+  const y0 = y0base - b;
+  const friend = (x, v) => {
+    const rows = ['  O  ', ' (#) ', '\\_|_/', '  |  ', ' / \\ '];
+    rows.forEach((r, i) => put(x, y0 + 5 + i, r, v));
+  };
+  friend(gx - 6, 0.08);
+  friend(gx + 2, 0.78);
+  // graduate
+  const wave = Math.floor(t * 4) % 2;
+  const face = Math.floor(t * 1.5) % 4 === 3 ? '(>o<)' : '(^o^)';
+  put(gx - 2, y0, '&@&@&', 0.45);
+  put(gx - 2, y0 + 1, face, 0.15);
+  put(gx, y0 + 2, '|', 0.25);
+  put(gx, y0 + 3, '|', 0.25);
+  put(gx - 3, y0 + 4, '_/_|_\\_', 0.25);
+  put(gx - 3, y0 + 2, '/', 0.25);
+  put(gx - 4, y0 + 1, '/', 0.25);
+  put(gx - 7, y0, '[=]', 0.78);
+  put(gx + 3, y0 + 2, '\\', 0.25);
+  if (wave) { put(gx + 4, y0 + 1, '\\', 0.25); put(gx + 5, y0, 'o', 0.15); }
+  else { put(gx + 4, y0 + 2, '-', 0.25); put(gx + 5, y0 + 2, 'o', 0.15); }
+  const caps = ['FINALLY GRADUATED!', 'CONGRATULATIONS!', 'HIP HIP HOORAY!'];
+  const cap = caps[Math.floor(t / 2.5) % caps.length];
+  put(Math.floor((w - cap.length) / 2), 1, cap, (t * 0.2) % 1);
+  return o;
+}
+
 module.exports = {
-  propose, donut, plasma, matrix, starfield, fire, life, waves, clock, tunnel,
+  graduate, propose, donut, plasma, matrix, starfield, fire, life, waves, clock, tunnel,
 };
 module.exports.meta = {
   donut: 'spinning 3D torus with z-buffer shading',
@@ -304,4 +360,5 @@ module.exports.meta = {
   clock: 'live digital clock with seconds bar',
   tunnel: 'checkered tunnel flythrough',
   propose: 'she asks, he says yes (confetti and hearts)',
+  graduate: 'graduate lifted on friends\' shoulders, confetti',
 };

@@ -29,6 +29,7 @@ Inspired by [ascii.live](https://github.com/hugomd/ascii-live) by hugomd. This p
 | clock     | live clock with seconds bar |
 | tunnel    | checkered tunnel flythrough |
 | propose   | she asks, he says yes (hearts and confetti) |
+| graduate  | graduate lifted on friends' shoulders, confetti |
 
 ## Options (query string)
 
