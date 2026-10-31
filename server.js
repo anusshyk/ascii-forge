@@ -20,7 +20,7 @@ const palettes = {
   rainbow: (v) => [196, 202, 208, 214, 226, 118, 46, 49, 51, 33, 21, 93, 129, 201][Math.floor(v * 13.99)],
   mono: null,
 };
-const defaultColor = { donut: 'fire', plasma: 'rainbow', matrix: 'matrix', starfield: 'ice', fire: 'fire', life: 'matrix', waves: 'ice', clock: 'rainbow', tunnel: 'rainbow', propose: 'rainbow', graduate: 'rainbow' };
+const defaultColor = { donut: 'fire', plasma: 'rainbow', matrix: 'matrix', starfield: 'ice', fire: 'fire', life: 'matrix', waves: 'ice', clock: 'rainbow', tunnel: 'rainbow', propose: 'rainbow', graduate: 'rainbow', star: 'rainbow' };
 
 function render(frame, w, h, palette) {
   let s = '';
@@ -52,10 +52,12 @@ options (query string):
   ?color=fire        fire | matrix | ice | rainbow | mono   (default depends on animation)
   ?speed=1.5         time multiplier (0.1-5)
   ?duration=10       stop after N seconds (default: run until you Ctrl+C)
+  ?name=Your+Name    custom name for the /star animation
 
 examples:
   curl "${host}/donut?color=ice&fps=30"
   curl "${host}/clock?w=100&h=30"
+  curl "${host}/star?name=Chudi+Sahab"
   curl "${host}/list"
 `;
 }
@@ -80,7 +82,7 @@ const server = http.createServer((req, res) => {
 
   res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no' });
   res.write(`${ESC}2J${ESC}?25l`);
-  const state = {};
+  const state = { name: String(q.get('name') || '').replace(/[^A-Za-z0-9 .'-]/g, '').trim().slice(0, 24).toUpperCase() };
   const t0 = Date.now();
   const tick = () => {
     const t = ((Date.now() - t0) / 1000) * speed;
