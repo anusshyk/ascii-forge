@@ -346,8 +346,70 @@ function graduate(t, w, h) {
   return o;
 }
 
+
+// ---------- star: a stage walk-on with a custom name (?name=...) ----------
+function star(t, w, h, st) {
+  const o = blank(w, h);
+  const put = (x, y, str, v) => {
+    for (let i = 0; i < str.length; i++) {
+      const xx = Math.round(x) + i;
+      if (str[i] !== ' ' && xx >= 0 && xx < w && y >= 0 && y < h) { o.chars[y * w + xx] = str[i]; o.vals[y * w + xx] = v; }
+    }
+  };
+  const name = (st && st.name) || 'THE LEGEND';
+  const T = t % 14, ground = h - 2, cx = Math.floor(w / 2);
+  const ease = (a) => { a = Math.max(0, Math.min(1, a)); return a * a * (3 - 2 * a); };
+  // spotlight cone
+  for (let y = 0; y < ground; y++) {
+    const hw = 2 + y * 0.45;
+    put(cx - hw, y, '/', 0.62);
+    put(cx + hw, y, '\\', 0.62);
+  }
+  put(0, ground, '='.repeat(w), 0.45);
+  put(cx - 12, ground, '#'.repeat(25), 0.12);
+  // banner with the name
+  const banner = `~*~ ${name} ~*~`;
+  put(Math.floor((w - banner.length) / 2), 2, banner, (t * 0.25) % 1);
+  const caps = ['PLEASE WELCOME', 'GIVE IT UP FOR', 'THE ONE AND ONLY', 'MAKE SOME NOISE FOR'];
+  const cap = caps[Math.floor(t / 3.5) % caps.length];
+  put(Math.floor((w - cap.length) / 2), 4, cap, 0.3);
+  // the figure
+  const fx = -6 + (cx - 2 + 6) * ease(T / 3);
+  const dancing = T >= 4.5;
+  const bowing = T >= 3 && T < 4.5;
+  const walk = T < 3 && Math.floor(T * 4) % 2;
+  const beat = Math.floor(t * 4) % 2;
+  const hop = dancing && beat ? 1 : 0;
+  const y = ground - 5 - hop;
+  if (bowing) {
+    put(fx, ground - 4, ' _=_ ', 0.1);
+    put(fx, ground - 3, '(^_^)', 0.15);
+    put(fx, ground - 2, ' /|\\ ', 0.55);
+    put(fx, ground - 1, ' / \\ ', 0.55);
+  } else {
+    put(fx, y, ' _=_ ', 0.1);
+    put(fx, y + 1, beat && dancing ? '(>o<)' : '(^_^)', 0.15);
+    put(fx, y + 2, dancing ? (beat ? '\\ | /' : ' /|\\ ') : ' /|\\ ', 0.55);
+    put(fx, y + 3, '  |  ', 0.55);
+    put(fx, y + 4, walk || (dancing && beat) ? '/   \\' : ' / \\ ', 0.55);
+  }
+  if (dancing) {
+    for (let i = 0; i < 6; i++) {
+      const r = ((t - 4.5) * 0.4 + i * 0.19) % 1;
+      put(cx + Math.sin(i * 2.3 + t) * 16 + (i % 2 ? 6 : -6), Math.floor(ground - 2 - r * (ground - 5)), i % 2 ? '♪' : '♫', (i * 0.17) % 1);
+    }
+  }
+  if (T >= 4) {
+    for (let i = 0; i < 40; i++) {
+      const f = ((T - 4) * 0.35 + i * 0.227) % 1;
+      put((i * 41 + 3) % w, Math.floor(f * ground), '*+.:o'[i % 5], (i * 0.151) % 1);
+    }
+  }
+  return o;
+}
+
 module.exports = {
-  graduate, propose, donut, plasma, matrix, starfield, fire, life, waves, clock, tunnel,
+  star, graduate, propose, donut, plasma, matrix, starfield, fire, life, waves, clock, tunnel,
 };
 module.exports.meta = {
   donut: 'spinning 3D torus with z-buffer shading',
@@ -361,4 +423,5 @@ module.exports.meta = {
   tunnel: 'checkered tunnel flythrough',
   propose: 'she asks, he says yes (confetti and hearts)',
   graduate: 'graduate lifted on friends\' shoulders, confetti',
+  star: 'stage walk-on with your own name: ?name=Your+Name',
 };
