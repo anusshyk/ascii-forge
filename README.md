@@ -30,11 +30,13 @@ Inspired by [ascii.live](https://github.com/hugomd/ascii-live) by hugomd. This p
 | tunnel    | checkered tunnel flythrough |
 | propose   | she asks, he says yes (hearts and confetti) |
 | graduate  | graduate lifted on friends' shoulders, confetti |
+| star      | stage walk-on with your own name: `?name=Chudi+Sahab` |
 
 ## Options (query string)
 
 `fps` (1-60), `w` / `h` (size), `color` (fire, matrix, ice, rainbow, mono),
-`speed` (0.1-5), `duration` (seconds, then the stream ends).
+`speed` (0.1-5), `duration` (seconds, then the stream ends),
+`name` (text for the `star` animation, letters and numbers, max 24 characters).
 
 ## Add your own animation
 
