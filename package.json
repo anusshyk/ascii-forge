@@ -1,0 +1,8 @@
+{
+  "name": "ascii-forge",
+  "version": "1.0.0",
+  "description": "Procedurally generated ASCII animations streamed over curl, inspired by ascii.live",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "license": "MIT"
+}
