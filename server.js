@@ -20,7 +20,7 @@ const palettes = {
   rainbow: (v) => [196, 202, 208, 214, 226, 118, 46, 49, 51, 33, 21, 93, 129, 201][Math.floor(v * 13.99)],
   mono: null,
 };
-const defaultColor = { donut: 'fire', plasma: 'rainbow', matrix: 'matrix', starfield: 'ice', fire: 'fire', life: 'matrix', waves: 'ice', clock: 'rainbow', tunnel: 'rainbow', propose: 'rainbow' };
+const defaultColor = { donut: 'fire', plasma: 'rainbow', matrix: 'matrix', starfield: 'ice', fire: 'fire', life: 'matrix', waves: 'ice', clock: 'rainbow', tunnel: 'rainbow', propose: 'rainbow', graduate: 'rainbow' };
 
 function render(frame, w, h, palette) {
   let s = '';
@@ -75,8 +75,8 @@ const server = http.createServer((req, res) => {
   const fps = clamp(q.get('fps'), 1, 60, 24);
   const speed = clamp(q.get('speed'), 0.1, 5, 1);
   const duration = clamp(q.get('duration'), 1, 3600, 0);
-  const colorName = q.get('color') || defaultColor[name];
-  const palette = palettes[colorName] === undefined ? palettes[defaultColor[name]] : palettes[colorName];
+  const colorName = q.get('color') || defaultColor[name] || 'rainbow';
+  const palette = palettes[colorName] === undefined ? palettes[defaultColor[name] || 'rainbow'] : palettes[colorName];
 
   res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no' });
   res.write(`${ESC}2J${ESC}?25l`);
